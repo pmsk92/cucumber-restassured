@@ -25,5 +25,19 @@ public class ApiTest1 extends BaseTest{
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode,200,"The given end point is not valid");
         System.out.println("Test Ends here.");
+ }
+    @When("^I try to get specific user \"(.*)\"$")
+    public void searchUser(int id){
+        RequestSpecification request = RestAssured.given();
+        response = request.get(baseURL+basePath+"users/"+id);
+    }
+    @Then("^I should get the user firstname")
+    public void getFirstName() throws ParseException {
+        ResponseBody body = response.body();
+        System.out.println("Response Body is:"+body.asString());
+        JSONParser parse = new JSONParser();
+        JSONObject data = (JSONObject) parse.parse(body.asString());
+        JSONObject object = (JSONObject) data.get("data");
+        System.out.println("First name if user is: "+object.get("first_name"));
     }
 }
